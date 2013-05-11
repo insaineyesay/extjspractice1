@@ -73,4 +73,29 @@ function doRpc($cdata){
 
 function doAroundCalls(&$fns, &$cdata, &$returnData=null) {
 	if(!$fns)
+	if(!$fns) {
+		return;
+	}
+	if(is_array($fns)) {
+		foreach($fns as $f) {
+			$f($cdata, $returnData);
+		}
+	} else{
+		$fns($cdata, $returnData);
+	}
+}
+
+$response = null;
+if (is_array($data)) {
+	$response = array();
+	foreach($data as $d) {
+		$response = doRpc($data);
+	}
+	if ($isForm && $isUpload) {
+		echo '<html><body><textarea>';
+		echo json_encode($response);
+		echo '</textarea></body></html>';
+	} else {
+		echo json_encode($response);
+	}
 }
